@@ -10,15 +10,15 @@ localhost_pem = pathlib.Path(__file__).with_name("cert.pem")
 ssl_context.load_verify_locations(localhost_pem, "key.pem")
 
 async def hello():
-    uri = "wss://localhost:443/admin"
+    uri = "wss://localhost/admin"
     async with websockets.connect(
         uri, ssl=ssl_context
     ) as websocket:
         greeting = await websocket.recv()
         print(f"Clients:\n\t {greeting}")
+        clnt = input("Select client:")
+        await websocket.send(clnt)
         while True:
-            clnt = input("Select client:")
-            await websocket.send(clnt)
             cmd = input("cmd:")
             await websocket.send(cmd)
             response = await websocket.recv()

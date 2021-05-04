@@ -19,13 +19,14 @@ async def conn_handler(websocket, path):
         await websocket.send(str[:len(str)-2] + "]")
         print("Awaiting client selection...")
         clnt = await websocket.recv()
-        print("Awaitting command...")
-        cmd = await websocket.recv()
-        for k,v in users.items():
-            if(v == clnt):
-                await k.send(cmd)
-                res = await k.recv()
-                await websocket.send(res) 
+        while True:
+            print("Awaitting command...")
+            cmd = await websocket.recv()
+            for k,v in users.items():
+                if(v == clnt):
+                    await k.send(cmd)
+                    res = await k.recv()
+                    await websocket.send(res) 
     await asyncio.sleep(1000)
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
 localhost_pem = pathlib.Path(__file__).with_name("cert.pem")

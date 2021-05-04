@@ -13,7 +13,7 @@ ssl_context.load_verify_locations(localhost_pem, "key.pem")
 
 
 async def hello():
-    uri = "wss://localhost:443/"
+    uri = "wss://localhost/"
     async with websockets.connect(uri, ssl=ssl_context) as websocket:
         while True:
             data = await websocket.recv()
