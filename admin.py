@@ -16,10 +16,13 @@ async def hello():
     ) as websocket:
         greeting = await websocket.recv()
         print(f"Clients:\n\t {greeting}")
-        clnt = input("Select client:")
-        await websocket.send(clnt)
-        cmd = input("cmd:")
-        await websocket.send(cmd)
+        while True:
+            clnt = input("Select client:")
+            await websocket.send(clnt)
+            cmd = input("cmd:")
+            await websocket.send(cmd)
+            response = await websocket.recv()
+            print(response)
 
 asyncio.get_event_loop().run_until_complete(hello())
 

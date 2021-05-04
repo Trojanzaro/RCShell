@@ -10,7 +10,7 @@ users = {}
 async def conn_handler(websocket, path):
     if (path == "/"):
         users[websocket] = websocket.remote_address[0]
-        await asyncio.sleep(1000)
+        print("Added new User: " + websocket.remote_address[0])
     elif (path == "/admin"):
         print("Admint connected!\nSending client List...")
         str = "["
@@ -24,6 +24,9 @@ async def conn_handler(websocket, path):
         for k,v in users.items():
             if(v == clnt):
                 await k.send(cmd)
+                res = await k.recv()
+                await websocket.send(res) 
+    await asyncio.sleep(1000)
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
 localhost_pem = pathlib.Path(__file__).with_name("cert.pem")
 ssl_context.load_cert_chain(localhost_pem, "key.pem")

