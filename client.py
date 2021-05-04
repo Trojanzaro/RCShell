@@ -8,8 +8,7 @@ import os
 import subprocess
 
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-localhost_pem = pathlib.Path(__file__).with_name("cert.pem")
-ssl_context.load_verify_locations(localhost_pem, "key.pem")
+ssl_context.load_verify_locations("./cert.pem", "./key.pem")
 
 
 async def hello():

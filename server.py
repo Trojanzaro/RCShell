@@ -29,8 +29,7 @@ async def conn_handler(websocket, path):
                     await websocket.send(res) 
     await asyncio.sleep(1000)
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-localhost_pem = pathlib.Path(__file__).with_name("cert.pem")
-ssl_context.load_cert_chain(localhost_pem, "key.pem")
+ssl_context.load_cert_chain("./cert.pem", "./key.pem")
 
 start_server = websockets.serve(
     conn_handler, "0.0.0.0", 443, ssl=ssl_context,

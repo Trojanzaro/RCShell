@@ -6,8 +6,7 @@ import ssl
 import websockets
 
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-localhost_pem = pathlib.Path(__file__).with_name("cert.pem")
-ssl_context.load_verify_locations(localhost_pem, "key.pem")
+ssl_context.load_verify_locations("./cert.pem", "./key.pem")
 
 async def hello():
     uri = "wss://localhost/admin"
@@ -22,7 +21,7 @@ async def hello():
             cmd = input("cmd:")
             await websocket.send(cmd)
             response = await websocket.recv()
-            print(response)
+            print(str(response))
 
 asyncio.get_event_loop().run_until_complete(hello())
 
